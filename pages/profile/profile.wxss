@@ -1,0 +1,79 @@
+/* profile.wxss */
+.profile-container {
+  padding: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.login-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 修复按钮不可见问题 */
+.login-btn {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: normal !important;
+}
+
+.login-btn::after {
+  border: none !important; /* 移除默认边框 */
+}
+
+/* 确保内容居中 */
+.login-btn {
+  display: flex !important;
+  align-items: center;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.nickname {
+  font-size: 16px;
+  color: #333;
+}
+
+.order-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.order-tab {
+  font-size: 14px;
+  color: #666;
+  padding: 10px;
+}
+
+.menu-list {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.menu-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
