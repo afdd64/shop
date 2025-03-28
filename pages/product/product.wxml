@@ -5,9 +5,11 @@
 <view class="container">
   <!-- 商品图片轮播 -->
   <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{false}}">
-    <swiper-item>
-      <image src="{{product.image}}" mode="aspectFill" class="swiper-image" />
-    </swiper-item>
+    <block wx:for="{{product.images}}" wx:key="index">
+      <swiper-item>
+        <image src="{{item}}" mode="aspectFill" class="swiper-image" />
+      </swiper-item>
+    </block>
   </swiper>
 
   <!-- 商品信息 -->

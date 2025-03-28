@@ -1,3 +1,4 @@
+const app = getApp(); // 添加这一行来获取全局 App 实例
 Page({
   data: {
     product: {
@@ -46,7 +47,6 @@ Page({
   },
   
   buyNow() {
-    const app = getApp(); // 添加这一行，获取全局 App 实例
     if (!app.globalData.userId) {
       wx.showToast({ title: '请先登录', icon: 'none' })
       return

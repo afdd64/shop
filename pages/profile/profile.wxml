@@ -1,39 +1,41 @@
+<!-- pages/profile/profile.wxml -->
 <view class="profile-container">
-  <!-- 个人信息模块 -->
-  <view class="user-info">
-    <!-- 登录按钮（必须用 button 组件触发） -->
-    <button 
-      wx:if="{{!userInfo.nickName || userInfo.nickName === '请登录'}}"
-      class="login-btn"
-      bindtap="handleLogin"
-      open-type="getUserInfo"
-    >
-      <image src="{{userInfo.avatarUrl}}" class="avatar"></image>
-      <text class="nickname">{{userInfo.nickName}}</text>
-    </button>
+    <!-- 个人信息模块 -->
+    <view class="user-info">
+        <!-- 登录按钮 -->
+        <button 
+            wx:if="{{!userInfo.nickName || userInfo.nickName === '请登录'}}"
+            class="login-btn"
+            open-type="getUserProfile"
+            bindgetuserprofile="onGetUserProfile"
+            bindtap="onGetUserProfile"
+        >
+            <image src="{{userInfo.avatarUrl}}" class="avatar"></image>
+            <text class="nickname">{{userInfo.nickName}}</text>
+        </button>
 
-    <!-- 已登录状态显示 -->
-    <view wx:else class="user-info-logged">
-      <image src="{{userInfo.avatarUrl}}" class="avatar"></image>
-      <text class="nickname">{{userInfo.nickName}}</text>
+        <!-- 已登录状态显示 -->
+        <view wx:else class="user-info-logged">
+            <image src="{{userInfo.avatarUrl}}" class="avatar"></image>
+            <text class="nickname">{{userInfo.nickName}}</text>
+        </view>
     </view>
-  </view>
 
-  <!-- 订单标签 -->
-  <view class="order-tabs">
-    <block wx:for="{{orderTabs}}" wx:key="value">
-      <view class="order-tab" data-tab="{{item.value}}" bindtap="switchTab">
-        {{item.label}}
-      </view>
-    </block>
-  </view>
+    <!-- 订单标签 -->
+    <view class="order-tabs">
+        <block wx:for="{{orderTabs}}" wx:key="value">
+            <view class="order-tab" data-tab="{{item.value}}" bindtap="switchTab">
+                {{item.label}}
+            </view>
+        </block>
+    </view>
 
-  <!-- 菜单列表 -->
-  <view class="menu-list">
-    <block wx:for="{{menuItems}}" wx:key="url">
-      <navigator url="{{item.url}}" class="menu-item">
-        {{item.label}}
-      </navigator>
-    </block>
-  </view>
+    <!-- 菜单列表 -->
+    <view class="menu-list">
+        <block wx:for="{{menuItems}}" wx:key="url">
+            <navigator url="{{item.url}}" class="menu-item">
+                {{item.label}}
+            </navigator>
+        </block>
+    </view>
 </view>
