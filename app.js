@@ -1,4 +1,3 @@
-// app.js
 App({
   globalData: {
       userInfo: null,
@@ -12,6 +11,8 @@ App({
           console.error('传递给 login 方法的 userInfo 参数未定义');
           return Promise.reject(new Error('传递给 login 方法的 userInfo 参数未定义'));
       }
+
+      console.log('login 请求参数:', { code, nickName: userInfo.nickName, avatarUrl: userInfo.avatarUrl });
 
       return new Promise((resolve, reject) => {
           wx.request({

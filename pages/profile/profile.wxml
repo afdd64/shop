@@ -1,4 +1,3 @@
-<!-- pages/profile/profile.wxml -->
 <view class="profile-container">
     <!-- 个人信息模块 -->
     <view class="user-info">
@@ -6,10 +5,7 @@
         <button 
             wx:if="{{!userInfo.nickName || userInfo.nickName === '请登录'}}"
             class="login-btn"
-            open-type="getUserProfile"
-            bindgetuserprofile="onGetUserProfile"
-            bindtap="onGetUserProfile"
-        >
+            bindtap="manualGetUserProfile">
             <image src="{{userInfo.avatarUrl}}" class="avatar"></image>
             <text class="nickname">{{userInfo.nickName}}</text>
         </button>
