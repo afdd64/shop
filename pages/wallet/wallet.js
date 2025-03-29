@@ -33,7 +33,7 @@ Page({
     wx.showLoading({ title: '加载中' })
     try {
       const { data } = await wx.request({
-        url: 'https://your-api.com/wallet',
+        url: 'http://localhost:3000/wallet',
         header: {
           'X-User-Id': app.globalData.userId,
           'Authorization': app.globalData.token

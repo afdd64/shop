@@ -22,12 +22,14 @@ router.post('/sync', (req, res) => {
   const userId = req.headers['x-user-id']
   const { cartItems } = req.body
 
+  if (!userId) return res.status(401).json({ code: 401, message: '未登录' })
+
   db.beginTransaction(err => {
     if (err) return res.status(500).json({ code: 500, message: '事务启动失败' })
 
     // 1. 清空原有购物车
     db.query('DELETE FROM cart WHERE user_id = ?', [userId], (err) => {
-      if (err) return db.rollback(() => { throw err })
+      if (err) return db.rollback(() => res.status(500).json({ code: 500, message: '清空购物车失败' }))
 
       // 2. 批量插入新数据
       if (cartItems.length > 0) {
@@ -39,12 +41,11 @@ router.post('/sync', (req, res) => {
           item.price,
           item.image
         ])
-        
         db.query(
           'INSERT INTO cart (user_id, product_id, quantity, name, price, image) VALUES ?',
           [values],
           (err) => {
-            if (err) return db.rollback(() => { throw err })
+            if (err) return db.rollback(() => res.status(500).json({ code: 500, message: '插入失败' }))
             db.commit(() => {
               res.json({ code: 200, message: '同步成功' })
             })

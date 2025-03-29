@@ -32,8 +32,8 @@ Page({
     try {
       // 1. 上传本地购物车
       const localCart = app.cart.get()
-      await wx.request({
-        url: 'https://your-api.com/cart/sync',
+      await wxRequest({
+        url: 'http://localhost:3000/cart/sync',
         method: 'POST',
         header: {
           'X-User-Id': app.globalData.userId,
@@ -43,8 +43,8 @@ Page({
       })
 
       // 2. 下载服务端购物车
-      const { data } = await wx.request({
-        url: 'https://your-api.com/cart',
+      const { data } = await wxRequest({
+        url: 'http://localhost:3000/cart',
         header: {
           'X-User-Id': app.globalData.userId,
           'Authorization': app.globalData.token
@@ -118,3 +118,14 @@ Page({
     })
   }
 })
+
+// 封装 wx.request 为 Promise
+function wxRequest(options) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      ...options,
+      success: resolve,
+      fail: reject
+    });
+  });
+}

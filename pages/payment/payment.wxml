@@ -19,7 +19,7 @@
       </view>
     </view>
     <view wx:else class="add-address">
-      <image src="/static/icons/add-address.png" class="add-icon"/>
+      <!-- 删除了图标，替换为文字按钮 -->
       <text class="add-text">添加收货地址</text>
     </view>
   </view>
