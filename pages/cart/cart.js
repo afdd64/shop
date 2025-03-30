@@ -62,17 +62,22 @@ Page({
     }
   },
 
-  // 合并本地和服务端购物车
-  mergeCarts(localCart, serverCart) {
-    const cartMap = new Map()
-    serverCart.forEach(item => cartMap.set(item.product_id, item))
+// 合并本地和服务端购物车
+mergeCarts(localCart, serverCart) {
+  if (localCart && serverCart) {
+    const cartMap = new Map();
+    serverCart.forEach(item => cartMap.set(item.product_id, item));
     localCart.forEach(item => {
       if (!cartMap.has(item.product_id)) {
-        cartMap.set(item.product_id, item)
+        cartMap.set(item.product_id, item);
       }
-    })
-    return Array.from(cartMap.values())
-  },
+    });
+    return Array.from(cartMap.values());
+  } else {
+    console.error('本地购物车或服务器购物车未定义');
+    return [];
+  }
+},
 
   // 增加数量
   increaseQuantity(e) {
@@ -96,7 +101,7 @@ Page({
   // 获取商品数量
   getQuantity(productId) {
     const item = this.data.cartItems.find(i => i.product_id === productId)
-    return item ? item.quantity : 0
+    return item? item.quantity : 0
   },
 
   // 删除商品

@@ -23,7 +23,7 @@
   </scroll-view>
 
   <!-- 新增地址按钮 -->
-  <button class="add-btn" bindtap="showEditForm">+ 新增地址</button>
+  <button class="add-btn" bindtap="showEditForm" style="width: 602rpx; height: 57rpx; display: block; box-sizing: border-box; left: 375rpx; top: 1352rpx; position: fixed; text-align: center">+ 新增地址</button>
 
   <!-- 编辑表单弹窗 -->
   <view class="modal" wx:if="{{showForm}}">

@@ -12,27 +12,26 @@ Page({
     this.initPaymentData(options.type)
   },
 
-  // pages/payment/payment.js
-async loadDefaultAddress() {
-  try {
-    const { data } = await wx.request({
-      url: 'http://localhost:3000/addresses/default',
-      header: { 'X-User-Id': app.globalData.userId }
-    })
-    if (data) {
-      this.setData({ selectedAddress: data })
+  async loadDefaultAddress() {
+    try {
+      const { data } = await wx.request({
+        url: 'http://localhost:3000/addresses/default',
+        header: { 'X-User-Id': app.globalData.userId }
+      })
+      if (data) {
+        this.setData({ selectedAddress: data })
+      }
+    } catch (e) {
+      console.error('加载地址失败', e)
     }
-  } catch (e) {
-    console.error('加载地址失败', e)
-  }
-},
+  },
 
   async chooseAddress() {
     const { data } = await wx.navigateTo({
       url: '/pages/address/address?selectMode=true'
     })
     if (data) {
-     this.setData({ selectedAddress: data })
+      this.setData({ selectedAddress: data })
     }
   },
 
@@ -53,5 +52,10 @@ async loadDefaultAddress() {
       }
       this.setData({ paymentAmount: product.price, currentProduct: product })
     }
+  },
+
+  handlePayment() {
+    // 这里添加处理支付的逻辑
+    console.log('开始处理支付');
   }
 })

@@ -1,12 +1,10 @@
-// pages/address/address.js
-const app = getApp()
+const app = getApp();
 
 Page({
   data: {
-    addressList: [],        // 地址列表
-    showForm: false,        // 显示编辑表单
-    editIndex: -1,          // 当前编辑的地址索引
-    formData: {             // 表单数据
+    addressList: [],
+    formData: {
+      id: null,
       name: '',
       phone: '',
       province: '',
@@ -14,195 +12,235 @@ Page({
       district: '',
       detail: '',
       is_default: false
-    }
+    },
+    isEditing: false,
+    showForm: false // 控制弹窗显示
   },
 
-  onShow() {
-    this.loadAddressList()
+  onLoad() {
+    this.loadAddressList();
   },
 
-  async loadAddressList() {
-    try {
-      const { data } = await wx.request({
-        url: 'http://localhost:3000/api/addresses',
-        header: {
-          'X-User-Id': app.globalData.userId,
-          'Authorization': app.globalData.token
+  // 加载地址列表
+  loadAddressList() {
+    wx.request({
+      url: 'http://localhost:3000/addresses',
+      method: 'GET',
+      header: {
+        'X-User-Id': app.globalData.userId,
+        'Authorization': app.globalData.token
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          this.setData({ addressList: res.data.data });
+        } else {
+          wx.showToast({ title: '加载失败', icon: 'none' });
         }
-      })
-      this.setData({ addressList: data.data })
-    } 
-    catch (error) {
-      wx.showToast({ title: '加载失败', icon: 'none' })
-    }
+      },
+      fail: () => {
+        wx.showToast({ title: '请求失败', icon: 'none' });
+      }
+    });
   },
 
-  // 显示编辑表单
+  // 点击“新增地址”按钮
   showEditForm() {
-    this.setData({ 
+    this.setData({
       showForm: true,
-      editIndex: -1,
-      formData: this.getEmptyFormData()
-    })
+      isEditing: false,
+      formData: {
+        id: null,
+        name: '',
+        phone: '',
+        province: '',
+        city: '',
+        district: '',
+        detail: '',
+        is_default: false
+      }
+    });
   },
 
-  // 获取空表单数据
-  getEmptyFormData() {
-    return {
-      name: '',
-      phone: '',
-      province: '',
-      city: '',
-      district: '',
-      detail: '',
-      is_default: false
-    }
+  // 关闭表单弹窗
+  hideForm() {
+    this.setData({ showForm: false });
   },
 
-  // 地区选择处理
+  // 输入框更新
+  handleInputChange(e) {
+    const { field } = e.currentTarget.dataset;
+    this.setData({
+      [`formData.${field}`]: e.detail.value
+    });
+  },
+
+  // 选择默认地址
+  handleDefaultChange(e) {
+    this.setData({
+      'formData.is_default': e.detail.value
+    });
+  },
+
+  // 进入编辑模式
+  editAddress(e) {
+    const index = e.currentTarget.dataset.index;
+    const address = this.data.addressList[index];
+
+    this.setData({
+      formData: { ...address },
+      isEditing: true,
+      showForm: true
+    });
+  },
+
+  // 添加或更新地址
+  saveAddress() {
+    if (!this.validateForm()) return;
+
+    const method = this.data.isEditing ? 'PUT' : 'POST';
+    const url = this.data.isEditing
+      ? `http://localhost:3000/addresses/${this.data.formData.id}`
+      : 'http://localhost:3000/addresses';
+
+    wx.request({
+      url,
+      method,
+      header: {
+        'X-User-Id': app.globalData.userId,
+        'Authorization': app.globalData.token
+      },
+      data: this.data.formData,
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({ title: this.data.isEditing ? '更新成功' : '添加成功', icon: 'success' });
+          this.setData({
+            isEditing: false,
+            showForm: false,
+            formData: { id: null, name: '', phone: '', province: '', city: '', district: '', detail: '', is_default: false }
+          });
+          this.loadAddressList();
+        } else {
+          wx.showToast({ title: '操作失败', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '请求失败', icon: 'none' });
+      }
+    });
+  },
+
+  // 绑定输入框的值到 formData
+  bindNameInput(e) {
+    this.setData({
+      'formData.name': e.detail.value
+    });
+  },
+
+  bindPhoneInput(e) {
+    this.setData({
+      'formData.phone': e.detail.value
+    });
+  },
+
+  bindDetailInput(e) {
+    this.setData({
+      'formData.detail': e.detail.value
+    });
+  },
+
   bindRegionChange(e) {
-    const [province, city, district] = e.detail.value
+    const [province, city, district] = e.detail.value;
     this.setData({
       'formData.province': province,
       'formData.city': city,
       'formData.district': district
-    })
+    });
   },
 
-  // 表单字段绑定
-  bindNameInput(e) {
-    this.setData({ 'formData.name': e.detail.value })
-  },
-  bindPhoneInput(e) {
-    this.setData({ 'formData.phone': e.detail.value })
-  },
-  bindDetailInput(e) {
-    this.setData({ 'formData.detail': e.detail.value })
-  },
   bindDefaultChange(e) {
-    this.setData({ 'formData.is_default': e.detail.value })
-  },
-
-  // 提交表单
-  async submitForm() {
-    if (!this.validateForm()) return
-
-    wx.showLoading({ title: '保存中' })
-    try {
-      if (this.data.editIndex === -1) {
-        await this.createAddress()
-      } else {
-        await this.updateAddress()
-      }
-      this.hideForm()
-      this.loadAddressList()
-    } catch (error) {
-      wx.showToast({ title: '保存失败', icon: 'none' })
-    } finally {
-      wx.hideLoading()
-    }
-  },
-
-  // 创建新地址
-  async createAddress() {
-    return wx.request({
-      url: 'http://localhost:3000/addresses',
-      method: 'POST',
-      header: {
-        'X-User-Id': app.globalData.userId,
-        'Authorization': app.globalData.token
-      },
-      data: this.data.formData
-    })
-  },
-
-  // 更新地址
-  async updateAddress() {
-    const addressId = this.data.addressList[this.data.editIndex].id
-    return wx.request({
-      url: `http://localhost:3000/addresses/${addressId}`,
-      method: 'PUT',
-      header: {
-        'X-User-Id': app.globalData.userId,
-        'Authorization': app.globalData.token
-      },
-      data: this.data.formData
-    })
-  },
-
-  // 编辑地址
-  editAddress(e) {
-    const index = e.currentTarget.dataset.index
     this.setData({
-      showForm: true,
-      editIndex: index,
-      formData: { ...this.data.addressList[index] }
-    })
+      'formData.is_default': e.detail.value
+    });
+  },
+
+  submitForm() {
+    if (!this.validateForm()) return;
+
+    const method = this.data.isEditing ? 'PUT' : 'POST';
+    const url = this.data.isEditing
+      ? `http://localhost:3000/addresses/${this.data.formData.id}`
+      : 'http://localhost:3000/addresses';
+
+    wx.request({
+      url,
+      method,
+      header: {
+        'X-User-Id': getApp().globalData.userId,
+        'Authorization': getApp().globalData.token
+      },
+      data: this.data.formData,
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.showToast({ title: this.data.isEditing ? '更新成功' : '添加成功', icon: 'success' });
+          this.setData({
+            showForm: false, // 关闭表单弹窗
+            isEditing: false,
+            formData: { id: null, name: '', phone: '', province: '', city: '', district: '', detail: '', is_default: false }
+          });
+          this.loadAddressList(); // 重新加载地址列表
+        } else {
+          wx.showToast({ title: '操作失败', icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '请求失败', icon: 'none' });
+      }
+    });
   },
 
   // 删除地址
-  async deleteAddress(e) {
-    const id = e.currentTarget.dataset.id
+  deleteAddress(e) {
+    const id = e.currentTarget.dataset.id;
     wx.showModal({
       title: '确认删除',
-      content: '确定要删除这个地址吗？',
-      success: async (res) => {
+      content: '确定要删除该地址吗？',
+      success: (res) => {
         if (res.confirm) {
-          try {
-            await wx.request({
-              url: `http://localhost:3000/addresses/${id}`,
-              method: 'DELETE',
-              header: {
-                'X-User-Id': app.globalData.userId,
-                'Authorization': app.globalData.token
+          wx.request({
+            url: `http://localhost:3000/addresses/${id}`,
+            method: 'DELETE',
+            header: {
+              'X-User-Id': app.globalData.userId,
+              'Authorization': app.globalData.token
+            },
+            success: (res) => {
+              if (res.statusCode === 200) {
+                wx.showToast({ title: '删除成功', icon: 'success' });
+                this.loadAddressList();
+              } else {
+                wx.showToast({ title: '删除失败', icon: 'none' });
               }
-            })
-            this.loadAddressList()
-          } catch (error) {
-            wx.showToast({ title: '删除失败', icon: 'none' })
-          }
+            },
+            fail: () => {
+              wx.showToast({ title: '请求失败', icon: 'none' });
+            }
+          });
         }
       }
-    })
+    });
   },
 
-  onLoad(options) {
-    this.setData({ selectMode: options.selectMode === 'true' })
-  },
-  
-  selectAddress(e) {
-    if (!this.data.selectMode) return
-    const index = e.currentTarget.dataset.index
-    const pages = getCurrentPages()
-    const prevPage = pages[pages.length - 2]
-    prevPage.setData({ selectedAddress: this.data.addressList[index] })
-    wx.navigateBack()
-  },
-
-  // 表单验证
+  // 校验表单
   validateForm() {
-    const form = this.data.formData
-    if (!form.name.trim()) {
-      wx.showToast({ title: '请输入收货人姓名', icon: 'none' })
-      return false
+    const { name, phone, province, city, district, detail } = this.data.formData;
+    if (!name || !phone || !province || !city || !district || !detail) {
+      wx.showToast({ title: '请填写完整信息', icon: 'none' });
+      return false;
     }
-    if (!/^1[3-9]\d{9}$/.test(form.phone)) {
-      wx.showToast({ title: '请输入正确手机号', icon: 'none' })
-      return false
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      wx.showToast({ title: '手机号格式不正确', icon: 'none' });
+      return false;
     }
-    if (!form.province || !form.city) {
-      wx.showToast({ title: '请选择所在地区', icon: 'none' })
-      return false
-    }
-    if (!form.detail.trim()) {
-      wx.showToast({ title: '请输入详细地址', icon: 'none' })
-      return false
-    }
-    return true
-  },
-
-  // 隐藏表单
-  hideForm() {
-    this.setData({ showForm: false })
+    return true;
   }
-})
+});

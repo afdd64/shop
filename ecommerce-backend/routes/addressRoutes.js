@@ -25,4 +25,23 @@ router.post('/', (req, res) => {
   })
 })
 
-module.exports = router
+// 更新地址
+router.put('/:id', (req, res) => {
+  const addressId = req.params.id;
+  const userId = req.headers['x-user-id'];
+  const address = req.body;
+
+  // 检查地址是否属于当前用户
+  db.query('SELECT * FROM addresses WHERE id = ? AND user_id = ?', [addressId, userId], (err, results) => {
+    if (err) return res.status(500).json({ code: 500, message: '数据库错误' });
+    if (results.length === 0) return res.status(404).json({ code: 404, message: '地址不存在或不属于当前用户' });
+
+    // 更新地址信息
+    db.query('UPDATE addresses SET ? WHERE id = ?', [address, addressId], (updateErr) => {
+      if (updateErr) return res.status(500).json({ code: 500, message: '更新失败' });
+      res.json({ code: 200, message: '更新成功' });
+    });
+  });
+});
+
+module.exports = router;
