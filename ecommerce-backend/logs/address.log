@@ -145,3 +145,14 @@
 {"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
 {"level":"info","message":"Fetching address list for userId: 3"}
 {"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"info","message":"Successfully updated address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
