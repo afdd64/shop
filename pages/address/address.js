@@ -34,10 +34,12 @@ Page({
         if (res.statusCode === 200) {
           this.setData({ addressList: res.data.data });
         } else {
+          console.error('加载地址列表失败，状态码:', res.statusCode, '响应数据:', res.data);
           wx.showToast({ title: '加载失败', icon: 'none' });
         }
       },
-      fail: () => {
+      fail: (err) => {
+        console.error('加载地址列表请求失败:', err);
         wx.showToast({ title: '请求失败', icon: 'none' });
       }
     });
@@ -70,7 +72,7 @@ Page({
   handleInputChange(e) {
     const { field } = e.currentTarget.dataset;
     this.setData({
-      [`formData.${field}`]: e.detail.value
+      ['formData.' + field]: e.detail.value
     });
   },
 
@@ -102,12 +104,24 @@ Page({
       ? `http://localhost:3000/addresses/${this.data.formData.id}`
       : 'http://localhost:3000/addresses';
 
+    console.log('即将发送的请求信息：', {
+      url,
+      method,
+      header: {
+        'X-User-Id': app.globalData.userId,
+        'Authorization': app.globalData.token,
+        'Content-Type': 'application/json'
+      },
+      data: this.data.formData
+    });
+
     wx.request({
       url,
       method,
       header: {
         'X-User-Id': app.globalData.userId,
-        'Authorization': app.globalData.token
+        'Authorization': app.globalData.token,
+        'Content-Type': 'application/json'
       },
       data: this.data.formData,
       success: (res) => {
@@ -120,10 +134,12 @@ Page({
           });
           this.loadAddressList();
         } else {
+          console.error('保存地址失败，状态码:', res.statusCode, '响应数据:', res.data);
           wx.showToast({ title: '操作失败', icon: 'none' });
         }
       },
-      fail: () => {
+      fail: (err) => {
+        console.error('保存地址请求失败:', err);
         wx.showToast({ title: '请求失败', icon: 'none' });
       }
     });
@@ -175,8 +191,9 @@ Page({
       url,
       method,
       header: {
-        'X-User-Id': getApp().globalData.userId,
-        'Authorization': getApp().globalData.token
+        'X-User-Id': app.globalData.userId,
+        'Authorization': app.globalData.token,
+        'Content-Type': 'application/json'
       },
       data: this.data.formData,
       success: (res) => {
@@ -189,10 +206,12 @@ Page({
           });
           this.loadAddressList(); // 重新加载地址列表
         } else {
+          console.error('提交表单失败，状态码:', res.statusCode, '响应数据:', res.data);
           wx.showToast({ title: '操作失败', icon: 'none' });
         }
       },
-      fail: () => {
+      fail: (err) => {
+        console.error('提交表单请求失败:', err);
         wx.showToast({ title: '请求失败', icon: 'none' });
       }
     });
@@ -218,10 +237,12 @@ Page({
                 wx.showToast({ title: '删除成功', icon: 'success' });
                 this.loadAddressList();
               } else {
+                console.error('删除地址失败，状态码:', res.statusCode, '响应数据:', res.data);
                 wx.showToast({ title: '删除失败', icon: 'none' });
               }
             },
-            fail: () => {
+            fail: (err) => {
+              console.error('删除地址请求失败:', err);
               wx.showToast({ title: '请求失败', icon: 'none' });
             }
           });
@@ -243,4 +264,4 @@ Page({
     }
     return true;
   }
-});
+});    

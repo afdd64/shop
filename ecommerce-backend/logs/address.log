@@ -1,0 +1,147 @@
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: undefined"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: undefined"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 3 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to delete address with ID: null for userId: 3"}
+{"level":"warn","message":"Address with ID: null not found or not owned by userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 3 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to delete address with ID: null for userId: 3"}
+{"level":"warn","message":"Address with ID: null not found or not owned by userId: 3"}
+{"level":"info","message":"Attempting to delete address with ID: 3 for userId: 3"}
+{"level":"info","message":"Successfully deleted address with ID: 3 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 2 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 2 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to delete address with ID: 2 for userId: 3"}
+{"level":"info","message":"Attempting to delete address with ID: 2 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully deleted address with ID: 2 for userId: 3"}
+{"level":"warn","message":"Address with ID: 2 not found or not owned by userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-29T07:29:54.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"info","message":"Successfully updated address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-29T07:29:54.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to delete address with ID: 1 for userId: 3"}
+{"level":"info","message":"Successfully deleted address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: 3"}
+{"level":"info","message":"Creating address for userId: 3, name: 15320039770"}
+{"level":"info","message":"Address created successfully with ID: 6"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 6 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 6"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 6 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 6"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Creating address for userId: 3, name: 作为"}
+{"level":"info","message":"Address created successfully with ID: 7"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 2 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 7 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 7"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:53:34.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to delete address with ID: 7 for userId: 3"}
+{"level":"info","message":"Successfully deleted address with ID: 7 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 6 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 6"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to update address with ID: 6 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 6"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to update address with ID: 6 for userId: 3"}
+{"level":"warn","message":"Address with ID: 6 not found or not owned by userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"error","message":"Error while updating address: ER_TRUNCATED_WRONG_VALUE: Incorrect datetime value: '2025-03-30T09:49:07.000Z' for column 'created_at' at row 1"}
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"info","message":"Successfully updated address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"info","message":"Successfully updated address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: [object Null]"}
+{"level":"info","message":"Successfully fetched 0 address(es) for userId: [object Null]"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Attempting to update address with ID: 1 for userId: 3"}
+{"level":"info","message":"Updating address with ID: 1"}
+{"level":"info","message":"Successfully updated address with ID: 1 for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address with ID: 1 for userId: undefined"}
+{"level":"warn","message":"Address with ID: 1 not found or not owned by userId: undefined"}
+{"level":"info","message":"Fetching address with ID: 1 for userId: undefined"}
+{"level":"warn","message":"Address with ID: 1 not found or not owned by userId: undefined"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
+{"level":"info","message":"Fetching address list for userId: 3"}
+{"level":"info","message":"Successfully fetched 1 address(es) for userId: 3"}
