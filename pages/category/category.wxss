@@ -1,30 +1,92 @@
 .container {
-  padding: 20rpx;
+  height: 100vh;
   background-color: #f8f8f8;
-  min-height: 100vh;
 }
 
-.product-list {
+/* 搜索栏 */
+.search-bar {
+  height: 15vh;
+  width: 100%;
+  background-color: #fff;
+  padding: 20rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.search-bar input {
+  border: 1rpx solid #ccc;
+  border-radius: 8rpx;
+  padding: 10rpx;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1rpx solid #ccc;
+  z-index: 1;
+}
+
+.search-result-item {
+  padding: 10rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+/* 分类和商品列表容器 */
+.category-product-container {
+  height: 85vh;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+}
+
+/* 分类名称列表 */
+.category-list {
+  width: 20%;
+  background-color: #f0f0f0;
+  overflow-y: auto;
+}
+
+.category-item {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  transition: background-color 0.3s ease;
+}
+
+/* 商品列表 */
+.product-list {
+  width: 80%;
+  overflow-y: auto;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.category-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
 }
 
 .product-item {
-  width: 48%;
+  width: 100%;
+  height: 200rpx;
   background-color: #fff;
   border-radius: 16rpx;
   margin-bottom: 20rpx;
   overflow: hidden;
+  display: flex;
 }
 
-.product-item image {
-  width: 100%;
-  height: 360rpx;
+.product-image {
+  width: 40%;
+  height: 100%;
 }
 
 .product-info {
+  width: 60%;
   padding: 20rpx;
+  box-sizing: border-box;
 }
 
 .product-name {
@@ -43,9 +105,29 @@
   font-weight: bold;
 }
 
-.empty-tip {
-  text-align: center;
-  color: #999;
-  padding: 40rpx;
-  width: 100%;
+.product-desc {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 10rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* 固定分类名称样式 */
+.fixed-category-title {
+  position: fixed;
+  top: 15vh;
+  left: 20%;
+  right: 0;
+  background-color: #fff;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  z-index: 1;
+}
+
+/* 突出显示对应分类 */
+.highlight-category {
+  background-color: #e6e6e6;
 }
