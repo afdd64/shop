@@ -8,7 +8,8 @@
     "pages/payment/payment",
     "pages/list/list",
     "pages/wallet/wallet",
-    "pages/address/address"
+    "pages/address/address",
+    "pages/order/order"
     
   ],
   "tabBar": {

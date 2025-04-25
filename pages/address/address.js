@@ -251,6 +251,19 @@ Page({
     });
   },
 
+  // 选择地址并返回给调用页面
+  chooseAddress(e) {
+    const index = e.currentTarget.dataset.index;
+    const address = this.data.addressList[index];
+
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    if (prevPage.route === 'pages/payment/payment') {
+        const eventChannel = prevPage.getOpenerEventChannel();
+        eventChannel.emit('chooseAddress', address);
+        wx.navigateBack();
+    }
+  },
   // 校验表单
   validateForm() {
     const { name, phone, province, city, district, detail } = this.data.formData;

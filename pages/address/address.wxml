@@ -3,7 +3,7 @@
   <!-- 地址列表 -->
   <scroll-view scroll-y class="address-list">
     <block wx:for="{{addressList}}" wx:key="id">
-      <view class="address-item {{item.is_default ? 'default' : ''}}">
+      <view class="address-item {{item.is_default ? 'default' : ''}}" bindtap="chooseAddress" data-index="{{index}}">
         <view class="info">
           <view class="header">
             <text class="name">{{item.name}}</text>

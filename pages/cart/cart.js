@@ -109,22 +109,51 @@ Page({
     },
 
     // 跳转支付
-    gotoPayment() {
-        if (this.data.totalPrice <= 0) {
-            wx.showToast({ title: '请选择商品', icon: 'none' });
-            return;
-        }
-        wx.navigateTo({
-            url: '/pages/payment/payment',
-            success: () => {
-                console.log('跳转成功');
-            },
-            fail: (err) => {
-                wx.showToast({ title: `跳转失败: ${err.errMsg}`, icon: 'none' });
-            }
-        });
+    async gotoPayment() {
+      if (this.data.totalPrice <= 0) {
+          wx.showToast({ title: '请选择商品', icon: 'none' });
+          return;
+      }
+  
+      try {
+          // 获取收货地址
+          const { data: addressData } = await wx.request({
+              url: 'http://localhost:3000/addresses/default',
+              header: { 'X-User-Id': app.globalData.userId }
+          });
+          if (!addressData) {
+              wx.showToast({ title: '请添加收货地址', icon: 'none' });
+              return;
+          }
+          const addressId = addressData.id;
+  
+          // 创建订单
+          const cartItems = app.cart.get();
+          const totalAmount = this.data.totalPrice;
+          const { data: orderData } = await wx.request({
+              url: 'http://localhost:3000/orders',
+              method: 'POST',
+              header: {
+                  'X-User-Id': app.globalData.userId,
+                  'Authorization': app.globalData.token
+              },
+              data: {
+                  items: cartItems,
+                  totalAmount,
+                  addressId
+              }
+          });
+  
+          // 跳转到订单详情页面
+          wx.navigateTo({
+              url: `/pages/order/order?id=${orderData.data.orderId}`
+          });
+      } catch (e) {
+          console.error('创建订单失败', e);
+          wx.showToast({ title: '创建订单失败', icon: 'none' });
+      }
     }
-});
+    });
 
 // 封装 wx.request 为 Promise
 function wxRequest(options) {

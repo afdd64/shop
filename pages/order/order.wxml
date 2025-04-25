@@ -1,0 +1,31 @@
+<!-- pages/order/order.wxml -->
+<view class="container">
+  <view class="order-info">
+    <view class="item">
+      <text>商品名称：</text>
+      <text>{{order.product_name}}</text>
+    </view>
+    <view class="item">
+      <text>商品价格：</text>
+      <text>￥{{order.product_price}}</text>
+    </view>
+    <view class="item">
+      <text>订单编号：</text>
+      <text>{{order.order_no}}</text>
+    </view>
+    <view class="item">
+      <text>创建时间：</text>
+      <text>{{order.created_at}}</text>
+    </view>
+    <view class="item" wx:if="{{order.paid_at}}">
+      <text>付款时间：</text>
+      <text>{{order.paid_at}}</text>
+    </view>
+  </view>
+
+  <view class="buttons">
+    <button wx:if="{{order.status === 'pending'}}" bindtap="cancelOrder">取消订单</button>
+    <button wx:if="{{order.status === 'pending'}}" bindtap="handlePayment">去支付</button>
+    <button wx:if="{{order.status === 'paid'}}" bindtap="refundOrder">退款</button>
+  </view>
+</view>

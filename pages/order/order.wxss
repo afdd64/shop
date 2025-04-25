@@ -1,0 +1,23 @@
+/* pages/order/order.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.order-info .item {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.order-info .item text:first-child {
+  width: 150rpx;
+}
+
+.buttons {
+  position: fixed;
+  right: 20rpx;
+  bottom: 20rpx;
+}
+
+.buttons button {
+  margin-left: 20rpx;
+}
