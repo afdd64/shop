@@ -62,7 +62,7 @@ Page({
       const addressId = this.data.selectedAddress.id
 
       const response = await wx.request({
-        url: 'http://localhost:3000/orders',
+        url: 'http://localhost:3000/order',
         method: 'POST',
         header: {
           'X-User-Id': userId,
