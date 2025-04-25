@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
           'quantity', oi.quantity
         )
       ) AS items
-    FROM orders o
+    FROM order o
     JOIN order_items oi ON o.id = oi.order_id
     JOIN products p ON oi.product_id = p.id
     WHERE o.user_id = ?
@@ -52,7 +52,7 @@ router.post('/:id/cancel', (req, res) => {
   const orderId = req.params.id;
   const userId = req.headers['x-user-id'];
   db.query(
-    'UPDATE orders SET status = "cancelled" WHERE id = ? AND user_id = ?',
+    'UPDATE order SET status = "cancelled" WHERE id = ? AND user_id = ?',
     [orderId, userId],
     (err, result) => {
       if (err) return res.status(500).json({ code: 500 });
@@ -76,7 +76,7 @@ router.post('/', (req, res) => {
           status: 'unpaid',
           created_at: new Date()
       };
-      db.query('INSERT INTO orders SET ?', orderData, (err, result) => {
+      db.query('INSERT INTO order SET ?', orderData, (err, result) => {
           if (err) return db.rollback(() => res.status(500).json({ code: 500, message: '插入订单记录失败' }));
           const orderId = result.insertId;
 
@@ -106,7 +106,7 @@ router.post('/:id/status', (req, res) => {
   const userId = req.headers['x-user-id'];
   const { status } = req.body;
   db.query(
-    'UPDATE orders SET status = ?, paid_at = NOW() WHERE id = ? AND user_id = ?',
+    'UPDATE order SET status = ?, paid_at = NOW() WHERE id = ? AND user_id = ?',
     [status, orderId, userId],
     (err, result) => {
       if (err) return res.status(500).json({ code: 500 });

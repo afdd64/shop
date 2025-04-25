@@ -3,7 +3,7 @@ const app = getApp()
 
 Page({
   data: {
-    orders: [],
+    order: [],
     currentTab: 'all',
     orderTabs: [
       { value: 'all', label: '全部订单' },
@@ -17,17 +17,17 @@ Page({
   onLoad(options) {
     const validStatus = ['all', 'unpaid', 'undelivered', 'received', 'unreviewed']
     const status = validStatus.includes(options.type) ? options.type : 'all'
-    this.setData({ currentTab: status }, this.loadOrders)
+    this.setData({ currentTab: status }, this.loadOrder)
   },
 
-  async loadOrders() {
+  async loadOrder() {
     try {
       // 修改请求 URL 为 order 路由
       const { data } = await wx.request({
         url: `http://localhost:3000/order?status=${this.data.currentTab}`,
         header: { 'X-User-Id': app.globalData.userId }
       })
-      this.setData({ orders: data.map(order => ({
+      this.setData({ order: data.map(order => ({
         ...order,
         statusText: this.getStatusText(order.status)
       })) })
@@ -48,7 +48,7 @@ Page({
 
   switchTab(e) {
     const tab = e.currentTarget.dataset.tab
-    this.setData({ currentTab: tab }, this.loadOrders)
+    this.setData({ currentTab: tab }, this.loadOrder)
   },
 
   viewOrderDetail(e) {

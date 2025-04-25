@@ -18,7 +18,7 @@ Page({
   async loadOrder(orderId) {
     try {
       const { data } = await wx.request({
-        url: `http://localhost:3000/orders/${orderId}`,
+        url: `http://localhost:3000/order/${orderId}`,
         header: { 'X-User-Id': app.globalData.userId }
       });
       this.setData({ order: data });
@@ -31,7 +31,7 @@ Page({
     const orderId = this.data.order.id;
     try {
       await wx.request({
-        url: `http://localhost:3000/orders/${orderId}/cancel`,
+        url: `http://localhost:3000/order/${orderId}/cancel`,
         method: 'POST',
         header: { 'X-User-Id': app.globalData.userId }
       });
@@ -57,7 +57,7 @@ Page({
 
   async wechatPayment() {
     wx.showToast({ title: '支付完成', icon: 'success' });
-    await this.updateOrderStatus('paid');
+    await this.updateOrdertatus('paid');
     wx.navigateTo({ url: `/pages/order/order?id=${this.data.order.id}` });
   },
 
@@ -84,7 +84,7 @@ Page({
                 header: { 'X-User-Id': app.globalData.userId },
                 data: { amount: orderAmount }
               });
-              await this.updateOrderStatus('paid');
+              await this.updateOrdertatus('paid');
               wx.showToast({ title: '支付成功', icon: 'success' });
               wx.navigateTo({ url: `/pages/order/order?id=${this.data.order.id}` });
             } catch (e) {
@@ -96,10 +96,10 @@ Page({
     }
   },
 
-  async updateOrderStatus(status) {
+  async updateOrdertatus(status) {
     const orderId = this.data.order.id;
     await wx.request({
-      url: `http://localhost:3000/orders/${orderId}/status`,
+      url: `http://localhost:3000/order/${orderId}/status`,
       method: 'POST',
       header: { 'X-User-Id': app.globalData.userId },
       data: { status }
