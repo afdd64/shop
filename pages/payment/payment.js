@@ -28,17 +28,8 @@ Page({
   },
 
   async chooseAddress() {
-    return new Promise((resolve) => {
-      wx.navigateTo({
-        url: '/pages/address/address?selectMode=true',
-        success: (res) => {
-          const eventChannel = res.eventChannel;
-          eventChannel.on('chooseAddress', (data) => {
-            this.setData({ selectedAddress: data });
-            resolve(data);
-          });
-        }
-      });
+    wx.navigateTo({
+        url: '/pages/address/address?selectMode=true'
     });
   },
 

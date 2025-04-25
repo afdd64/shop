@@ -251,18 +251,26 @@ Page({
     });
   },
 
-  // 选择地址并返回给调用页面
-  chooseAddress(e) {
+  // 选择地址
+  selectAddress(e) {
     const index = e.currentTarget.dataset.index;
-    const address = this.data.addressList[index];
+    const selectedAddress = this.data.addressList[index];
 
+    // 获取当前页面栈
     const pages = getCurrentPages();
-    const prevPage = pages[pages.length - 2];
+    const prevPage = pages[pages.length - 2]; // 上一个页面，即支付页面
+
+    // 将所选地址数据传递给上一个页面
     if (prevPage.route === 'pages/payment/payment') {
-        const eventChannel = prevPage.getOpenerEventChannel();
-        eventChannel.emit('chooseAddress', address);
-        wx.navigateBack();
+        prevPage.setData({
+            selectedAddress
+        });
     }
+
+    // 返回上一个页面
+    wx.navigateBack({
+        delta: 1
+    });
   },
   // 校验表单
   validateForm() {

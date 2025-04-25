@@ -1,30 +1,29 @@
 <!-- pages/address/address.wxml -->
 <view class="container">
-  <!-- 地址列表 -->
+    <!-- 地址列表 -->
   <scroll-view scroll-y class="address-list">
-    <block wx:for="{{addressList}}" wx:key="id">
-      <view class="address-item {{item.is_default ? 'default' : ''}}" bindtap="chooseAddress" data-index="{{index}}">
-        <view class="info">
-          <view class="header">
-            <text class="name">{{item.name}}</text>
-            <text class="phone">{{item.phone}}</text>
-            <text class="default-tag" wx:if="{{item.is_default}}">默认</text>
+      <block wx:for="{{addressList}}" wx:key="id">
+          <view class="address-item {{item.is_default ? 'default' : ''}}" bindtap="selectAddress" data-index="{{index}}">
+              <view class="info">
+                  <view class="header">
+                      <text class="name">{{item.name}}</text>
+                      <text class="phone">{{item.phone}}</text>
+                      <text class="default-tag" wx:if="{{item.is_default}}">默认</text>
+                  </view>
+                  <view class="detail">
+                      {{item.province}}{{item.city}}{{item.district}}{{item.detail}}
+                  </view>
+              </view>
+              <view class="operations">
+                  <text class="edit" bindtap="editAddress" data-index="{{index}}">编辑</text>
+                  <text class="delete" bindtap="deleteAddress" data-id="{{item.id}}">删除</text>
+              </view>
           </view>
-          <view class="detail">
-            {{item.province}}{{item.city}}{{item.district}}{{item.detail}}
-          </view>
-        </view>
-        <view class="operations">
-          <text class="edit" bindtap="editAddress" data-index="{{index}}">编辑</text>
-          <text class="delete" bindtap="deleteAddress" data-id="{{item.id}}">删除</text>
-        </view>
-      </view>
-    </block>
+      </block>
   </scroll-view>
 
   <!-- 新增地址按钮 -->
-  <button class="add-btn" bindtap="showEditForm" style="width: 602rpx; height: 57rpx; display: block; box-sizing: border-box; left: 375rpx; top: 1352rpx; position: fixed; text-align: center">+ 新增地址</button>
-
+  <button class="add-btn" bindtap="showEditForm">+ 新增地址</button>
   <!-- 编辑表单弹窗 -->
   <view class="modal" wx:if="{{showForm}}">
     <view class="form-container">
