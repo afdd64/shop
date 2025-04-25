@@ -16,3 +16,4 @@ node_modules/
 ecommerce-backend/logs/address.log
 ecommerce-backend/logs/address.log
 orders.sql
+ecommerce-backend/logs/address.log
