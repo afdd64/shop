@@ -22,8 +22,9 @@ Page({
 
   async loadOrders() {
     try {
+      // 修改请求 URL 为 order 路由
       const { data } = await wx.request({
-        url: `http://localhost:3000/orders?status=${this.data.currentTab}`,
+        url: `http://localhost:3000/order?status=${this.data.currentTab}`,
         header: { 'X-User-Id': app.globalData.userId }
       })
       this.setData({ orders: data.map(order => ({

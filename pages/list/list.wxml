@@ -23,7 +23,7 @@
         </view>
         
         <view class="goods-list">
-          <block wx:for="{{item.goods}}" wx:key="id">
+          <block wx:for="{{item.items}}" wx:key="id">
             <view class="goods-item">
               <image src="{{item.image}}" class="goods-image"/>
               <view class="goods-info">
