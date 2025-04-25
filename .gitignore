@@ -14,3 +14,4 @@ $RECYCLE.BIN/
 node_modules/
 *.bat
 ecommerce-backend/logs/address.log
+ecommerce-backend/logs/address.log

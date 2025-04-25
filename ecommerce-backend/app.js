@@ -9,6 +9,7 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes'); // 引入分类路由
 const addressRoutes = require('./routes/addressRoutes');
 const walletRoutes = require('./routes/walletRoutes');
+const orderRoutes = require('./routes/orderRoutes'); // 引入订单路由
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,6 +21,7 @@ app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes); // 使用分类路由
 app.use('/addresses', addressRoutes);
 app.use('/wallet', walletRoutes);
+app.use('/orders', orderRoutes); // 使用订单路由
 
 // 配置静态文件服务
 app.use('/static', express.static('../static'));
