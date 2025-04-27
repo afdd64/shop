@@ -57,7 +57,7 @@ Page({
 
   async wechatPayment() {
     wx.showToast({ title: '支付完成', icon: 'success' });
-    await this.updateOrdertatus('paid');
+    await this.updateOrderStatus('paid');
     wx.navigateTo({ url: `/pages/order/order?id=${this.data.order.id}` });
   },
 
@@ -67,7 +67,7 @@ Page({
       header: { 'X-User-Id': app.globalData.userId }
     });
     const walletBalance = data.balance;
-    const orderAmount = this.data.order.product_price;
+    const orderAmount = this.data.order.total_amount;
 
     if (walletBalance < orderAmount) {
       wx.showToast({ title: '金额不足，请充值', icon: 'none' });
@@ -84,7 +84,7 @@ Page({
                 header: { 'X-User-Id': app.globalData.userId },
                 data: { amount: orderAmount }
               });
-              await this.updateOrdertatus('paid');
+              await this.updateOrderStatus('paid');
               wx.showToast({ title: '支付成功', icon: 'success' });
               wx.navigateTo({ url: `/pages/order/order?id=${this.data.order.id}` });
             } catch (e) {
@@ -96,7 +96,7 @@ Page({
     }
   },
 
-  async updateOrdertatus(status) {
+  async updateOrderStatus(status) {
     const orderId = this.data.order.id;
     await wx.request({
       url: `http://localhost:3000/order/${orderId}/status`,

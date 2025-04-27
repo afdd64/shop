@@ -2,14 +2,6 @@
 <view class="container">
   <view class="order-info">
     <view class="item">
-      <text>商品名称：</text>
-      <text>{{order.product_name}}</text>
-    </view>
-    <view class="item">
-      <text>商品价格：</text>
-      <text>￥{{order.product_price}}</text>
-    </view>
-    <view class="item">
       <text>订单编号：</text>
       <text>{{order.order_no}}</text>
     </view>
@@ -20,6 +12,24 @@
     <view class="item" wx:if="{{order.paid_at}}">
       <text>付款时间：</text>
       <text>{{order.paid_at}}</text>
+    </view>
+    <view class="item">
+      <text>订单状态：</text>
+      <text>{{order.status}}</text>
+    </view>
+    <view class="item">
+      <text>订单金额：</text>
+      <text>￥{{order.total_amount}}</text>
+    </view>
+    <view class="item">
+      <text>收货地址 ID：</text>
+      <text>{{order.address_id}}</text>
+    </view>
+    <view class="item">
+      <text>商品列表：</text>
+      <view wx:for="{{order.items}}" wx:key="id">
+        <text>{{item.name}} x {{item.quantity}}，单价：￥{{item.price}}</text>
+      </view>
     </view>
   </view>
 

@@ -5,11 +5,13 @@ Page({
   data: {
     paymentAmount: 0,
     cartItems: [],
-    currentProduct: null
+    currentProduct: null,
+    selectedAddress: null
   },
 
   onLoad(options) {
     this.initPaymentData(options.type)
+    this.loadDefaultAddress()
   },
 
   async loadDefaultAddress() {
@@ -70,7 +72,11 @@ Page({
           'Content-Type': 'application/json'
         },
         data: {
-          items: cartItems,
+          items: cartItems.map(item => ({
+            product_id: item.id, // 假设商品 ID 字段为 id
+            quantity: item.quantity,
+            price: item.price
+          })),
           totalAmount,
           addressId
         }
