@@ -72,17 +72,14 @@ Page({
           'Content-Type': 'application/json'
         },
         data: {
-          items: cartItems.map(item => ({
-            product_id: item.id, // 假设商品 ID 字段为 id
-            quantity: item.quantity,
-            price: item.price
-          })),
+          items: cartItems,
           totalAmount,
           addressId
         }
       })
 
-      if (response.statusCode === 200) {
+      console.log('服务器返回的完整数据:', response.data); // 打印服务器返回的数据
+      if (response.statusCode === 200 && response.data.code === 200) {
         console.log('订单创建成功:', response.data)
         // 处理订单创建成功的逻辑
       } else {
