@@ -58,10 +58,10 @@ initPaymentData(type) {
     // 确保商品信息包含必要的字段
     const { id, name, price, quantity = 1 } = product;
     const singleItem = {
-      product_id: id,
+      product_id: Number(id), // 转换为数值
       name,
-      price,
-      quantity
+      price: Number(price),
+      quantity: Number(quantity || 1)
     };
     this.setData({ 
       paymentAmount: price, 
@@ -121,17 +121,19 @@ initPaymentData(type) {
             });
 
             if (response.statusCode === 200) {
-                console.log('订单创建成功:', response.data);
-                wx.navigateTo({
-                    url: `/pages/order/order?id=${response.data.data.orderId}`
-                });
-            } else {
-                console.error('订单创建失败:', response);
-                wx.showToast({ title: '订单创建失败', icon: 'none' });
-            }
-        } catch (error) {
-            console.error('创建订单时出错:', error);
-            wx.showToast({ title: '请求出错', icon: 'none' });
-        }
-    }
+              console.log('订单创建成功:', response.data);
+              // 处理订单创建成功的逻辑
+          } else {
+              console.error('订单创建失败:', response);
+              wx.showToast({ title: '订单创建失败', icon: 'none' });
+          }
+      } catch (error) {
+          if (error) {
+              console.error('创建订单时出错:', error);
+          } else {
+              console.error('创建订单时出错: 未知错误');
+          }
+          wx.showToast({ title: '请求出错', icon: 'none' });
+      }
+  }
 });

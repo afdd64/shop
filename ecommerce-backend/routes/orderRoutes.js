@@ -1,4 +1,3 @@
-//ecommerce-backend\routes\orderRoutes.js
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
@@ -27,8 +26,7 @@ router.get('/', (req, res) => {
 
   const params = [userId];
 
-  // 状态过滤
-  if (status && status !== 'all') {
+  if (status && status!== 'all') {
     sql += ' AND o.status = ?';
     params.push(status);
   }
@@ -36,7 +34,10 @@ router.get('/', (req, res) => {
   sql += ' GROUP BY o.id ORDER BY o.created_at DESC';
 
   db.query(sql, params, (err, results) => {
-    if (err) return res.status(500).json({ code: 500 });
+    if (err) {
+      console.error('获取订单列表失败:', err);
+      return res.status(500).json({ code: 500, message: '服务器错误' });
+    }
     res.json({ 
       code: 200, 
       data: results.map(order => ({
@@ -47,70 +48,99 @@ router.get('/', (req, res) => {
   });
 });
 
-// 取消订单
-router.post('/:id/cancel', (req, res) => {
-  const orderId = req.params.id;
-  const userId = req.headers['x-user-id'];
-  db.query(
-    'UPDATE orders SET status = "cancelled" WHERE id = ? AND user_id = ?',
-    [orderId, userId],
-    (err, result) => {
-      if (err) return res.status(500).json({ code: 500 });
-      res.json({ code: 200 });
-    }
-  );
-});
+// 生成订单编号
+function generateOrderNo() {
+  const timestamp = new Date().getTime();
+  const random = Math.floor(Math.random() * 10000);
+  return `ORD${timestamp}${random.toString().padStart(4, '0')}`;
+}
 
-// 创建订单
+// 创建订单（修改后的逻辑）
 router.post('/', (req, res) => {
+  console.log('[创建订单] 请求头:', req.headers);
+  console.log('[创建订单] 请求体:', req.body);
+
   const userId = req.headers['x-user-id'];
   const { items, totalAmount, addressId } = req.body;
 
-  // 检查 items 数组中的每个元素是否包含 product_id 字段
-  const invalidItems = items.filter(item => !item.product_id);
-  if (invalidItems.length > 0) {
-    return res.status(400).json({ code: 400, message: '部分商品记录缺少 product_id 字段' });
+  // 数据验证
+  if (!userId ||!items ||!totalAmount ||!addressId) {
+    return res.status(400).json({ code: 400, message: '缺少必要参数' });
   }
 
   db.beginTransaction(err => {
-    if (err) return res.status(500).json({ code: 500, message: '事务启动失败' });
+    if (err) {
+      console.error('事务启动失败:', err);
+      return res.status(500).json({ code: 500, message: '事务启动失败' });
+    }
 
-    // 生成唯一的订单编号
     const orderNo = generateOrderNo();
-
-    // 插入订单记录
     const orderData = {
       user_id: userId,
       total_amount: totalAmount,
       address_id: addressId,
-      status: 'unpaid',
-      created_at: new Date(),
-      order_no: orderNo // 添加 order_no 字段
+      status: 'pending',
+      order_no: orderNo
     };
-    db.query('INSERT INTO orders SET ?', orderData, (err, result) => {
-      if (err) {
-        console.error('插入订单记录时出错:', err);
-        return db.rollback(() => res.status(500).json({ code: 500, message: '插入订单记录失败' }));
-      }
-      const orderId = result.insertId;
 
-      // 插入订单商品记录
+    // 1. 插入订单主记录
+    db.query('INSERT INTO orders SET?', orderData, (err, orderResult) => {
+      if (err) {
+        console.error('插入订单记录失败:', err);
+        return db.rollback(() => {
+          res.status(500).json({ code: 500, message: '插入订单记录失败' });
+        });
+      }
+
+      const orderId = orderResult.insertId;
+      console.log('创建的订单ID:', orderId);
+
+      // 2. 准备订单项数据（确保格式正确）
       const orderItems = items.map(item => [
         orderId,
         item.product_id,
         item.quantity,
         item.price
       ]);
+
+      console.log('准备插入的订单项数据:', orderItems);
+
+      // 3. 插入订单项（修改后的SQL）
       db.query(
-        'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ?',
+        'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES?',
         [orderItems],
-        (err) => {
+        (err, result) => {
           if (err) {
-            console.error('插入订单商品记录时出错:', err);
-            return db.rollback(() => res.status(500).json({ code: 500, message: '插入订单商品记录失败' }));
+            console.error('插入订单项失败:', err);
+            return db.rollback(() => {
+              res.status(500).json({ 
+                code: 500, 
+                message: '插入订单项失败',
+                error: err.message 
+              });
+            });
           }
-          db.commit(() => {
-            res.json({ code: 200, data: { orderId } });
+
+          console.log('插入订单项结果:', result);
+
+          // 4. 提交事务
+          db.commit(err => {
+            if (err) {
+              console.error('提交事务失败:', err);
+              return db.rollback(() => {
+                res.status(500).json({ code: 500, message: '提交事务失败' });
+              });
+            }
+
+            console.log('订单创建成功，受影响行数:', result.affectedRows);
+            res.json({ 
+              code: 200, 
+              data: { 
+                orderId,
+                orderNo,
+                itemsCount: items.length 
+              } 
+            });
           });
         }
       );
@@ -118,26 +148,67 @@ router.post('/', (req, res) => {
   });
 });
 
-// 更新订单状态
-router.post('/:id/status', (req, res) => {
+// 取消订单
+router.post('/:id/cancel', (req, res) => {
   const orderId = req.params.id;
   const userId = req.headers['x-user-id'];
-  const { status } = req.body;
+
   db.query(
-    'UPDATE orders SET status = ?, paid_at = NOW() WHERE id = ? AND user_id = ?',
-    [status, orderId, userId],
+    'UPDATE orders SET status = "cancelled" WHERE id =? AND user_id =?',
+    [orderId, userId],
     (err, result) => {
-      if (err) return res.status(500).json({ code: 500 });
+      if (err) {
+        console.error('取消订单失败:', err);
+        return res.status(500).json({ 
+          code: 500, 
+          message: '取消订单失败' 
+        });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ 
+          code: 404, 
+          message: '订单不存在或无权操作' 
+        });
+      }
       res.json({ code: 200 });
     }
   );
 });
 
-// 生成唯一的订单编号
-function generateOrderNo() {
-  const timestamp = new Date().getTime();
-  const random = Math.floor(Math.random() * 10000);
-  return `${timestamp}${random}`;
-}
+// 更新订单状态
+router.post('/:id/status', (req, res) => {
+  const orderId = req.params.id;
+  const userId = req.headers['x-user-id'];
+  const { status } = req.body;
 
-module.exports = router;
+  if (!['pending', 'paid', 'shipped', 'completed', 'cancelled'].includes(status)) {
+    return res.status(400).json({ 
+      code: 400, 
+      message: '无效的订单状态' 
+    });
+  }
+
+  db.query(
+    'UPDATE orders SET status =?, paid_at = IF(? = "paid", NOW(), paid_at) WHERE id =? AND user_id =?',
+    [status, status, orderId, userId],
+    (err, result) => {
+      if (err) {
+        console.error('更新订单状态失败:', err);
+        return res.status(500).json({ 
+          code: 500, 
+          message: '更新订单状态失败' 
+        });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ 
+          code: 404, 
+          message: '订单不存在或无权操作' 
+        });
+      }
+      res.json({ code: 200 });
+    }
+  );
+});
+
+
+module.exports = router;    
