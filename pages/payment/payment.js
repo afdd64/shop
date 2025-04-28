@@ -37,39 +37,38 @@ Page({
         }
     },
 
-    // shop/pages/payment/payment.js
-initPaymentData(type) {
-  if (type === 'cart') {
-    const cartItems = app.cart.get()
-    if (cartItems.length === 0) {
-      wx.showToast({ title: '购物车为空', icon: 'none' })
-      return wx.navigateBack()
-    }
-    const amount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-    this.setData({ paymentAmount: amount, cartItems })
-  } else {
-    const product = app.globalData.currentProduct
-    // 添加检测代码，输出接收到的商品信息到控制台
-    console.log('从商品页面接收到的商品信息:', product);
-    if (!product || !product.price) {
-      wx.showToast({ title: '商品信息错误', icon: 'none' })
-      return wx.navigateBack()
-    }
-    // 确保商品信息包含必要的字段
-    const { id, name, price, quantity = 1 } = product;
-    const singleItem = {
-      product_id: Number(id), // 转换为数值
-      name,
-      price: Number(price),
-      quantity: Number(quantity || 1)
-    };
-    this.setData({ 
-      paymentAmount: price, 
-      currentProduct: product,
-      cartItems: [singleItem] // 模拟单个商品的购物车数据
-    });
-  }
-},
+    initPaymentData(type) {
+        if (type === 'cart') {
+            const cartItems = app.cart.get()
+            if (cartItems.length === 0) {
+                wx.showToast({ title: '购物车为空', icon: 'none' })
+                return wx.navigateBack()
+            }
+            const amount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            this.setData({ paymentAmount: amount, cartItems })
+        } else {
+            const product = app.globalData.currentProduct
+            // 添加检测代码，输出接收到的商品信息到控制台
+            console.log('从商品页面接收到的商品信息:', product);
+            if (!product || !product.price) {
+                wx.showToast({ title: '商品信息错误', icon: 'none' })
+                return wx.navigateBack()
+            }
+            // 确保商品信息包含必要的字段
+            const { id, name, price, quantity = 1 } = product;
+            const singleItem = {
+                product_id: Number(id), // 转换为数值
+                name,
+                price: Number(price),
+                quantity: Number(quantity || 1)
+            };
+            this.setData({ 
+                paymentAmount: price, 
+                currentProduct: product,
+                cartItems: [singleItem] // 模拟单个商品的购物车数据
+            });
+        }
+    },
 
     async handlePayment() {
         try {
@@ -105,35 +104,46 @@ initPaymentData(type) {
                 return;
             }
 
-            const response = await wx.request({
-                url: 'http://localhost:3000/order',
-                method: 'POST',
-                header: {
-                    'X-User-Id': userId,
-                    'Authorization': app.globalData.token,
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    items,
-                    totalAmount,
-                    addressId
-                }
+            const response = await new Promise((resolve, reject) => {
+                wx.request({
+                    url: 'http://localhost:3000/order',
+                    method: 'POST',
+                    header: {
+                        'X-User-Id': userId,
+                        'Authorization': app.globalData.token,
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        items,
+                        totalAmount,
+                        addressId
+                    },
+                    success: (res) => {
+                        resolve(res);
+                    },
+                    fail: (err) => {
+                        reject(err);
+                    }
+                });
             });
 
-            if (response.statusCode === 200) {
-              console.log('订单创建成功:', response.data);
-              // 处理订单创建成功的逻辑
-          } else {
-              console.error('订单创建失败:', response);
-              wx.showToast({ title: '订单创建失败', icon: 'none' });
-          }
-      } catch (error) {
-          if (error) {
-              console.error('创建订单时出错:', error);
-          } else {
-              console.error('创建订单时出错: 未知错误');
-          }
-          wx.showToast({ title: '请求出错', icon: 'none' });
-      }
-  }
+            console.log('完整响应对象:', response);
+
+            if (response && response.statusCode === 200) {
+                console.log('订单创建成功:', response.data)
+                // 处理订单创建成功的逻辑
+                wx.showToast({ title: '订单创建成功', icon: 'success' });
+                // 跳转到订单详情页面
+                wx.navigateTo({
+                    url: `/pages/order/order?id=${response.data.data.orderId}`
+                });
+            } else {
+                console.error('订单创建失败:', response)
+                wx.showToast({ title: `订单创建失败: ${response.errMsg || '未知错误'}`, icon: 'none' })
+            }
+        } catch (error) {
+            console.error('创建订单时出错:', error)
+            wx.showToast({ title: '请求出错', icon: 'none' })
+        }
+    }
 });
