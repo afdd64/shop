@@ -1,3 +1,4 @@
+// shop/ecommerce-backend/routes/orderRoutes.js
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
@@ -210,5 +211,50 @@ router.post('/:id/status', (req, res) => {
   );
 });
 
+// 在 module.exports 前添加这个新路由
+router.get('/:id', (req, res) => {
+  const orderId = req.params.id;
+  const userId = req.headers['x-user-id'];
 
+  const sql = `
+    SELECT o.*, 
+      JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'id', p.id,
+          'name', p.name,
+          'price', p.price,
+          'image', p.image,
+          'quantity', oi.quantity
+        )
+      ) AS items,
+      a.*
+    FROM orders o
+    JOIN order_items oi ON o.id = oi.order_id
+    JOIN products p ON oi.product_id = p.id
+    JOIN addresses a ON o.address_id = a.id
+    WHERE o.id = ? AND o.user_id = ?
+    GROUP BY o.id
+  `;
+
+  db.query(sql, [orderId, userId], (err, results) => {
+    if (err) {
+      console.error('获取订单详情失败:', err);
+      return res.status(500).json({ code: 500, message: '服务器错误' });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ code: 404, message: '订单不存在' });
+    }
+
+    const order = {
+      ...results[0],
+      items: JSON.parse(results[0].items)
+    };
+
+    res.json({ 
+      code: 200, 
+      data: order 
+    });
+  });
+});
 module.exports = router;    
