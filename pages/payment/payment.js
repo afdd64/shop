@@ -37,24 +37,39 @@ Page({
         }
     },
 
-    initPaymentData(type) {
-        if (type === 'cart') {
-            const cartItems = app.cart.get();
-            if (cartItems.length === 0) {
-                wx.showToast({ title: '购物车为空', icon: 'none' });
-                return wx.navigateBack();
-            }
-            const amount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            this.setData({ paymentAmount: amount, cartItems });
-        } else {
-            const product = app.globalData.currentProduct;
-            if (!product ||!product.price) {
-                wx.showToast({ title: '商品信息错误', icon: 'none' });
-                return wx.navigateBack();
-            }
-            this.setData({ paymentAmount: product.price, currentProduct: product });
-        }
-    },
+    // shop/pages/payment/payment.js
+initPaymentData(type) {
+  if (type === 'cart') {
+    const cartItems = app.cart.get()
+    if (cartItems.length === 0) {
+      wx.showToast({ title: '购物车为空', icon: 'none' })
+      return wx.navigateBack()
+    }
+    const amount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    this.setData({ paymentAmount: amount, cartItems })
+  } else {
+    const product = app.globalData.currentProduct
+    // 添加检测代码，输出接收到的商品信息到控制台
+    console.log('从商品页面接收到的商品信息:', product);
+    if (!product || !product.price) {
+      wx.showToast({ title: '商品信息错误', icon: 'none' })
+      return wx.navigateBack()
+    }
+    // 确保商品信息包含必要的字段
+    const { id, name, price, quantity = 1 } = product;
+    const singleItem = {
+      product_id: id,
+      name,
+      price,
+      quantity
+    };
+    this.setData({ 
+      paymentAmount: price, 
+      currentProduct: product,
+      cartItems: [singleItem] // 模拟单个商品的购物车数据
+    });
+  }
+},
 
     async handlePayment() {
         try {

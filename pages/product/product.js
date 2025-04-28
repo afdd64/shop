@@ -54,6 +54,8 @@ Page({
     
     // 缓存当前商品
     app.globalData.currentProduct = this.data.product
+    // 添加检测代码，输出商品信息到控制台
+    console.log('即将传输到支付页面的商品信息:', app.globalData.currentProduct);
     wx.navigateTo({
       url: '/pages/payment/payment?type=single'
     })
