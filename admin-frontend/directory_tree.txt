@@ -1,0 +1,36 @@
+admin-frontend/
+├── public/
+│   ├── favicon.ico
+│   └── index.html
+├── src/
+│   ├── api/
+│   │   ├── auth.js
+│   │   ├── axios.js
+│   │   ├── category.js
+│   │   ├── order.js
+│   │   ├── product.js
+│   │   └── user.js
+│   ├── assets/
+│   │   └── logo.png
+│   ├── components/
+│   │   ├── HelloWorld.vue
+│   │   ├── Navbar.vue
+│   │   └── Sidebar.vue
+│   ├── router/
+│   │   └── index.js
+│   ├── views/
+│   │   ├── CategoryList.vue
+│   │   ├── Dashboard.vue
+│   │   ├── Login.vue
+│   │   ├── ProductForm.vue
+│   │   └── ProductList.vue
+│   ├── App.vue
+│   └── main.js
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── directory_tree.txt
+├── jsconfig.json
+├── package-lock.json
+├── package.json
+└── vue.config.js

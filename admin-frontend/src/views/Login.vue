@@ -1,13 +1,23 @@
+<!-- admin-frontend/src/views/Login.vue -->
 <template>
   <div class="login-container">
-    <el-form :model="form" :rules="rules" ref="loginForm" label-position="left" label-width="80px">
+    <el-form
+      :model="form"
+      :rules="rules"
+      ref="loginForm"
+      label-position="left"
+      label-width="80px"
+    >
       <h2 class="title">后台登录</h2>
+
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" autocomplete="off" />
       </el-form-item>
+
       <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="form.password" autocomplete="off" />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="submitLogin">登录</el-button>
       </el-form-item>
@@ -18,8 +28,9 @@
 <script>
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '@/api/auth';
 import { ElMessage } from 'element-plus';
+// 确保这行会从 src/api/auth.js 中正确引入 login 方法
+import { login } from '@/api/auth';
 
 export default {
   name: 'Login',
@@ -39,14 +50,16 @@ export default {
       loginForm.value.validate(async (valid) => {
         if (valid) {
           try {
+            // login({ username, password }) 返回示例：{ token, user: { id, username, role } }
             const res = await login({ username: form.username, password: form.password });
-            // res = { token, user: { id, username, role } }
+            // 将 token 与 user 信息存到 localStorage
             localStorage.setItem('admin-token', res.token);
             localStorage.setItem('admin-user', JSON.stringify(res.user));
             ElMessage.success('登录成功');
+            // 登陆成功后跳转到仪表盘
             router.push('/');
           } catch (err) {
-            // 错误消息在 axios 拦截器里已提示
+            // 如果后端返回 401/403，axios 拦截器里会触发 ElMessage.error，这里不需额外处理
           }
         }
       });

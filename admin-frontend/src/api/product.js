@@ -1,39 +1,62 @@
-// admin-frontend/src/api/category.js
+// admin-frontend/src/api/product.js
+
 import request from './axios';
 
-export function fetchCategories() {
+/**
+ * 获取商品列表
+ * @param {Object} params 可选查询参数
+ */
+export function fetchProducts(params) {
   return request({
-    url: '/categories',
+    url: '/products',
     method: 'get',
+    params
   });
 }
 
-export function fetchCategory(id) {
+/**
+ * 获取单个商品详情
+ * @param {number|string} id
+ */
+export function fetchProduct(id) {
   return request({
-    url: `/categories/${id}`,
-    method: 'get',
+    url: `/products/${id}`,
+    method: 'get'
   });
 }
 
-export function createCategory(data) {
+/**
+ * 创建新商品
+ * @param {Object} data 商品信息，如 { name, price, categoryId, ... }
+ */
+export function createProduct(data) {
   return request({
-    url: '/categories',
+    url: '/products',
     method: 'post',
-    data,
+    data
   });
 }
 
-export function updateCategory(id, data) {
+/**
+ * 更新商品
+ * @param {number|string} id
+ * @param {Object} data 更新字段
+ */
+export function updateProduct(id, data) {
   return request({
-    url: `/categories/${id}`,
+    url: `/products/${id}`,
     method: 'put',
-    data,
+    data
   });
 }
 
-export function deleteCategory(id) {
+/**
+ * 删除商品
+ * @param {number|string} id
+ */
+export function deleteProduct(id) {
   return request({
-    url: `/categories/${id}`,
-    method: 'delete',
+    url: `/products/${id}`,
+    method: 'delete'
   });
 }

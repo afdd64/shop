@@ -1,50 +1,169 @@
+<!-- admin-frontend/src/components/Sidebar.vue -->
 <template>
-  <el-menu
-    :default-active="activeMenu"
-    class="el-menu-vertical-demo"
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b"
-    router
-  >
-    <el-menu-item index="/">仪表盘</el-menu-item>
-    <el-sub-menu index="products">
-      <template #title><i class="el-icon-goods"></i>商品管理</template>
-      <el-menu-item index="/products">商品列表</el-menu-item>
-      <el-menu-item index="/product/create">新增商品</el-menu-item>
-    </el-sub-menu>
-    <el-sub-menu index="categories">
-      <template #title><i class="el-icon-menu"></i>分类管理</template>
-      <el-menu-item index="/categories">分类列表</el-menu-item>
-      <el-menu-item index="/category/create">新增分类</el-menu-item>
-    </el-sub-menu>
-    <el-menu-item index="/orders"><i class="el-icon-document"></i>订单管理</el-menu-item>
-    <el-menu-item index="/users"><i class="el-icon-user"></i>用户管理</el-menu-item>
-    <el-menu-item @click="logout"><i class="el-icon-switch-button"></i>退出登录</el-menu-item>
-  </el-menu>
+  <aside class="sidebar">
+    <div class="sidebar-title">商家后台</div>
+
+    <ul class="menu">
+      <!-- 仪表盘 -->
+      <li class="menu-item">
+        <router-link to="/" class="menu-link" exact-active-class="active">
+          仪表盘
+        </router-link>
+      </li>
+
+      <!-- 商品管理，有下拉菜单 -->
+      <li class="menu-item has-children">
+        <a href="javascript:;" @click.prevent="toggleMenu('product')" class="menu-link">
+          商品管理
+          <span class="arrow" :class="{ open: open.product }">›</span>
+        </a>
+        <ul v-show="open.product" class="submenu">
+          <li>
+            <router-link to="/products" class="submenu-link" active-class="active">
+              商品列表
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/products/add" class="submenu-link" active-class="active">
+              新增商品
+            </router-link>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 分类管理，有下拉菜单 -->
+      <li class="menu-item has-children">
+        <a href="javascript:;" @click.prevent="toggleMenu('category')" class="menu-link">
+          分类管理
+          <span class="arrow" :class="{ open: open.category }">›</span>
+        </a>
+        <ul v-show="open.category" class="submenu">
+          <li>
+            <router-link to="/categories" class="submenu-link" active-class="active">
+              分类列表
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/categories/add" class="submenu-link" active-class="active">
+              新增分类
+            </router-link>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 订单管理（无下拉） -->
+      <li class="menu-item">
+        <router-link to="/orders" class="menu-link" active-class="active">
+          订单管理
+        </router-link>
+      </li>
+
+      <!-- 用户管理（无下拉） -->
+      <li class="menu-item">
+        <router-link to="/users" class="menu-link" active-class="active">
+          用户管理
+        </router-link>
+      </li>
+
+      <!-- 退出登录 -->
+      <li class="menu-item">
+        <a href="javascript:;" class="menu-link" @click.prevent="logout">
+          退出登录
+        </a>
+      </li>
+    </ul>
+  </aside>
 </template>
 
-<script>
-import { useRouter, useRoute } from 'vue-router';
+<script setup>
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'Sidebar',
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
-    const activeMenu = route.path;
-    const logout = () => {
-      localStorage.removeItem('admin-token');
-      router.push('/login');
-    };
-    return { activeMenu, logout };
-  },
-};
+const router = useRouter()
+
+// 控制子菜单展开/收起
+const open = reactive({
+  product: false,
+  category: false
+})
+
+function toggleMenu(menuKey) {
+  open[menuKey] = !open[menuKey]
+}
+
+// 退出登录逻辑：清除 token 并跳转到 /login
+function logout() {
+  localStorage.removeItem('token')
+  router.push('/login')
+}
 </script>
 
 <style scoped>
-.el-menu-vertical-demo {
+.sidebar {
   width: 200px;
-  min-height: 100vh;
+  background-color: #2d3a4b;
+  color: #fff;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* 标题 */
+.sidebar-title {
+  padding: 20px;
+  font-size: 1.2rem;
+  text-align: center;
+  background-color: #1f2a36;
+}
+
+/* 一级菜单 */
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.menu-item {
+  position: relative;
+}
+.menu-link {
+  display: block;
+  padding: 12px 20px;
+  color: #cfd8dc;
+  text-decoration: none;
+  cursor: pointer;
+}
+.menu-link:hover,
+.menu-link.active {
+  background-color: #1f2a36;
+  color: #fff;
+}
+
+/* 带子菜单的菜单项箭头 */
+.has-children .arrow {
+  float: right;
+  transition: transform 0.2s;
+}
+.has-children .arrow.open {
+  transform: rotate(90deg);
+}
+
+/* 二级菜单 */
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+  background-color: #32414b;
+}
+.submenu li {
+  margin: 0;
+}
+.submenu-link {
+  display: block;
+  padding: 8px 20px;
+  color: #b0bec5;
+  text-decoration: none;
+}
+.submenu-link:hover,
+.submenu-link.active {
+  background-color: #1f2a36;
+  color: #fff;
 }
 </style>
