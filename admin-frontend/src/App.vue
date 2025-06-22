@@ -1,49 +1,46 @@
 <!-- admin-frontend/src/App.vue -->
 <template>
-  <div id="app">
-    <!-- 1. 顶部导航 -->
-    <Navbar />
+  <div id="app" class="app-container">
+    <Sidebar v-if="showLayout" />
 
-    <div class="layout">
-      <!-- 2. 左侧侧边栏 -->
-      <Sidebar />
+    <div class="main-content">
+      <Navbar v-if="showLayout" />
 
-      <!-- 3. 右侧主内容区：路由渲染位置 -->
-      <main class="main-content">
-        <router-view/>
-      </main>
+      <div class="content-wrapper">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import Navbar from '@/components/Navbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
+<script setup>
+import Sidebar from '@/components/Sidebar.vue';
+import Navbar  from '@/components/Navbar.vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  name: 'App',
-  components: { Navbar, Sidebar }
-}
+const route = useRoute();
+const showLayout = computed(() => route.name !== 'Login');
 </script>
 
 <style>
-/* 简单布局，仅作示例 */
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+html, body, #app {
+  height: 100%;
   margin: 0;
 }
-.layout {
-  flex: 1;
+.app-container {
   display: flex;
-  overflow: hidden;
+  height: 100%;
 }
 .main-content {
   flex: 1;
-  padding: 20px;
-  background-color: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+}
+.content-wrapper {
+  padding: 16px;
+  background-color: #f5f7fa;
+  flex: 1;
   overflow-y: auto;
 }
 </style>

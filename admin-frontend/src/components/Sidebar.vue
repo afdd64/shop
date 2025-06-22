@@ -4,14 +4,12 @@
     <div class="sidebar-title">商家后台</div>
 
     <ul class="menu">
-      <!-- 仪表盘 -->
       <li class="menu-item">
         <router-link to="/" class="menu-link" exact-active-class="active">
           仪表盘
         </router-link>
       </li>
 
-      <!-- 商品管理，有下拉菜单 -->
       <li class="menu-item has-children">
         <a href="javascript:;" @click.prevent="toggleMenu('product')" class="menu-link">
           商品管理
@@ -31,7 +29,6 @@
         </ul>
       </li>
 
-      <!-- 分类管理，有下拉菜单 -->
       <li class="menu-item has-children">
         <a href="javascript:;" @click.prevent="toggleMenu('category')" class="menu-link">
           分类管理
@@ -51,21 +48,18 @@
         </ul>
       </li>
 
-      <!-- 订单管理（无下拉） -->
       <li class="menu-item">
         <router-link to="/orders" class="menu-link" active-class="active">
           订单管理
         </router-link>
       </li>
 
-      <!-- 用户管理（无下拉） -->
       <li class="menu-item">
         <router-link to="/users" class="menu-link" active-class="active">
           用户管理
         </router-link>
       </li>
 
-      <!-- 退出登录 -->
       <li class="menu-item">
         <a href="javascript:;" class="menu-link" @click.prevent="logout">
           退出登录
@@ -76,25 +70,20 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
-
-// 控制子菜单展开/收起
-const open = reactive({
-  product: false,
-  category: false
-})
+const router = useRouter();
+const open = reactive({ product: false, category: false });
 
 function toggleMenu(menuKey) {
-  open[menuKey] = !open[menuKey]
+  open[menuKey] = !open[menuKey];
 }
 
-// 退出登录逻辑：清除 token 并跳转到 /login
 function logout() {
-  localStorage.removeItem('token')
-  router.push('/login')
+  localStorage.removeItem('admin-token');
+  localStorage.removeItem('admin-user');
+  router.push('/login');
 }
 </script>
 
@@ -106,16 +95,12 @@ function logout() {
   height: 100%;
   overflow-y: auto;
 }
-
-/* 标题 */
 .sidebar-title {
   padding: 20px;
   font-size: 1.2rem;
   text-align: center;
   background-color: #1f2a36;
 }
-
-/* 一级菜单 */
 .menu {
   list-style: none;
   padding: 0;
@@ -136,8 +121,6 @@ function logout() {
   background-color: #1f2a36;
   color: #fff;
 }
-
-/* 带子菜单的菜单项箭头 */
 .has-children .arrow {
   float: right;
   transition: transform 0.2s;
@@ -145,8 +128,6 @@ function logout() {
 .has-children .arrow.open {
   transform: rotate(90deg);
 }
-
-/* 二级菜单 */
 .submenu {
   list-style: none;
   padding-left: 20px;
